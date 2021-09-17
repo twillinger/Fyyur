@@ -2,7 +2,9 @@ from datetime import datetime
 from flask_wtf import Form
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField
 from wtforms.validators import DataRequired, AnyOf, URL
+from flask_wtf import CsrfProtect
 
+csrf = CsrfProtect()
 class ShowForm(Form):
     artist_id = StringField(
         'artist_id'
