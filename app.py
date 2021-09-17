@@ -13,33 +13,21 @@ from logging import Formatter, FileHandler
 from flask_wtf import Form
 from forms import *
 from flask_migrate import Migrate
-from flask_wtf import CsrfProtect
-from forms import csrf
 
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
 
 app = Flask(__name__)
-csrf = CsrfProtect()
-#app.config.from_object('config.settings')
-csrf.init_app(app)
-app.config.update(dict(
-    SECRET_KEY="123456789",
-    WTF_CSRF_SECRET_KEY="123456789"
-))
 moment = Moment(app)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
 # TODO: connect to a local postgresql database
-app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:4928wuzi@localhost:5432/fyyur'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-
-
 
 #----------------------------------------------------------------------------#
 # Models.
@@ -370,7 +358,7 @@ def show_artist(artist_id):
 #  ----------------------------------------------------------------
 @app.route('/artists/<int:artist_id>/edit', methods=['GET'])
 def edit_artist(artist_id):
-  form = ArtistForm(request.form, meta={"csrf": False})
+  form = ArtistForm()
   artist={
     "id": 4,
     "name": "Guns N Petals",
