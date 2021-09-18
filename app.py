@@ -45,6 +45,7 @@ class Venue(db.Model):
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
     show_id = db.Column(db.Integer, db.ForeignKey('Show.id'), nullable=True)
+    shows = db.relationship('Show', backref='venue', lazy='joined', cascade="all, delete")
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
@@ -60,13 +61,16 @@ class Artist(db.Model):
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
     show_id = db.Column(db.Integer, db.ForeignKey('Show.id'), nullable=True)
+    shows = db.relationship('Show', backref='artist', lazy='joined', cascade="all, delete")
 
 class Show(db.Model): 
     __tablename__ = 'Show'
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime(), nullable=True)
-    artist = db.relationship('Artist', backref='list', lazy=True)
-    venue = db.relationship('Venue', backref='list', lazy=True)
+    venue_id = db.Column(db.Integer, nullable=True)
+    artist_id = db.Column(db.Integer, nullable=True)
+    #artist = db.relationship('Artist', backref='list', lazy=True)
+    #venue = db.relationship('Venue', backref='list', lazy=True)
 
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
@@ -83,7 +87,7 @@ def format_datetime(value, format='medium'):
       format="EEEE MMMM, d, y 'at' h:mma"
   elif format == 'medium':
       format="EE MM, dd, y h:mma"
-  return babel.dates.format_datetime(date, format, locale='en')
+  return babel.dates.format_datetime(date, format)
 
 app.jinja_env.filters['datetime'] = format_datetime
 
@@ -272,32 +276,21 @@ def create_artist_submission():
 def shows():
   # displays list of shows at /shows
   # TODO: replace with real venues data.
-  #art = Artist.query.all()
-  #venu = Venue.query.all()
-  #querya = db.session.query(Show).join(Venue).all
   show = db.session.query(
+    Show.venue_id,
     Show.id,
-    Show.date,
-    Venue.name,
+    #Show.start_time,
+    Venue.name.label("venue_name"),
     Artist.id,
     Artist.name,
     Artist.image_link
-).join(
+  ).join(
     Venue
-).join(
+  ).join(
     Artist
-).filter(
+  ).filter(
     Show.id >= 1
-).first_or_404()
-
-#  data=[{
-#    "venue_id": 1,
-#    "venue_name": "The Musical Hop",
-#    "artist_id": 4,
-#    "artist_name": "Guns N Petals",
-#    "artist_image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80",
-#    "start_time": "2019-05-21T21:30:00.000Z"
-#  }]
+  ).all()
   return render_template('pages/shows.html', shows=show)
 
 @app.route('/shows/create')
