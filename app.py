@@ -45,6 +45,8 @@ class Venue(db.Model):
     phone = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
+    seeking_talent = db.Column(db.Boolean, nullable=False, default=False)
+    seeking_description = db.Column(db.String(1000))
     shows = db.relationship('Show', backref='venue', lazy=True)
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
@@ -151,20 +153,19 @@ def create_venue_submission():
             venue = Venue(
                 name=form.name.data,
                 city=form.city.data,
-                #city = request.form['city'],
-                #state = request.form['state'],
-                #address = request.form['address'],
-                #phone = request.form['phone'],
-                #genres = request.form.getlist('genres'),
-                #facebook_link = request.form['facebook_link'],
-                #image_link = request.form['image_link'],
-                #website = request.form['website'],
-                #seeking_talent = True if 'seeking_talent' in request.form else False,
-                #seeking_description = request.form['seeking_description'], 
-                #)
+                state=form.state.data,
+                adress=form.adress.data,
+                phone=form.phone.data,
+                genres=form.genres.data,
+                facebook_link=form.genres.data,
+                image_link=form.genres.data,
+                website=form.genres.data,
+                seeking_talent=form.seeking_talent.data,
+                seeking_description=form.seeking_description.data
             )
             db.session.add(venue)
             db.session.commit()
+            flash('Venue ' + form.name.data + ' was successfully listed!')
         except SQLAlchemyError as e:
             print(e)
             db.session.rollback()
