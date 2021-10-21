@@ -395,17 +395,9 @@ def create_show_submission():
     if form.validate():
         try:
             show = Show(
-                name=form.name.data,
-                city=form.city.data,
-                state=form.state.data,
-                adress=form.adress.data,
-                phone=form.phone.data,
-                genres=form.genres.data,
-                facebook_link=form.genres.data,
-                image_link=form.genres.data,
-                website=form.genres.data,
-                seeking_venue=form.seeking_venue.data,
-                seeking_description=form.seeking_description.data
+                artist_id=form.artist_id.data,
+                venue_id=form.venue_id.data,
+                start_time=form.start_time.data
             )
             db.session.add(show)
             db.session.commit()
