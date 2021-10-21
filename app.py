@@ -53,7 +53,6 @@ class Venue(db.Model):
 
 class Artist(db.Model):
     __tablename__ = 'Artist'
-
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     city = db.Column(db.String(120))
@@ -62,6 +61,8 @@ class Artist(db.Model):
     genres = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
+    seeking_venue = db.Column(db.Boolean, nullable=True, default=False)
+    seeking_description = db.Column(db.String(1000))
     shows = db.relationship('Show', backref='artist', lazy=True)
 
 class Show(db.Model): 
@@ -294,11 +295,43 @@ def create_artist_submission():
   # TODO: insert form data as a new Venue record in the db, instead
   # TODO: modify data to be the data object returned from db insertion
 
+    form = ArtistForm(request.form, meta={'csrf': False})
+    if form.validate():
+        try:
+            artist = Artist(
+                name=form.name.data,
+                city=form.city.data,
+                state=form.state.data,
+                adress=form.adress.data,
+                phone=form.phone.data,
+                genres=form.genres.data,
+                facebook_link=form.genres.data,
+                image_link=form.genres.data,
+                website=form.genres.data,
+                seeking_venue=form.seeking_venue.data,
+                seeking_description=form.seeking_description.data
+            )
+            db.session.add(artist)
+            db.session.commit()
+            flash('Artist ' + form.name.data + ' was successfully listed!')
+        except SQLAlchemyError as e:
+            print(e)
+            db.session.rollback()
+            flash('An error occurred. Venue ' + form.name.data + ' could not be listed.')
+        finally:
+            db.session.close()
+    else:
+        message = []
+        for field, errors in form.errors.items():
+            message.append(field + ': (' + '|'.join(errors) + ')')
+        flash('The Artist data is not valid. Please try again!')
+    return render_template('pages/home.html')
+
   # on successful db insert, flash success
-  flash('Artist ' + request.form['name'] + ' was successfully listed!')
+#  flash('Artist ' + request.form['name'] + ' was successfully listed!')
   # TODO: on unsuccessful db insert, flash an error instead.
   # e.g., flash('An error occurred. Artist ' + data.name + ' could not be listed.')
-  return render_template('pages/home.html')
+#  return render_template('pages/home.html')
 
 
 #  Shows
@@ -358,13 +391,43 @@ def create_shows():
 def create_show_submission():
   # called to create new shows in the db, upon submitting new show listing form
   # TODO: insert form data as a new Show record in the db, instead
-
+    form = ShowForm(request.form, meta={'csrf': False})
+    if form.validate():
+        try:
+            show = Show(
+                name=form.name.data,
+                city=form.city.data,
+                state=form.state.data,
+                adress=form.adress.data,
+                phone=form.phone.data,
+                genres=form.genres.data,
+                facebook_link=form.genres.data,
+                image_link=form.genres.data,
+                website=form.genres.data,
+                seeking_venue=form.seeking_venue.data,
+                seeking_description=form.seeking_description.data
+            )
+            db.session.add(show)
+            db.session.commit()
+            flash('Show ' + form.name.data + ' was successfully listed!')
+        except SQLAlchemyError as e:
+            print(e)
+            db.session.rollback()
+            flash('An error occurred. Show ' + form.name.data + ' could not be listed.')
+        finally:
+            db.session.close()
+    else:
+        message = []
+        for field, errors in form.errors.items():
+            message.append(field + ': (' + '|'.join(errors) + ')')
+        flash('The Show data is not valid. Please try again!')
+    return render_template('pages/home.html')
   # on successful db insert, flash success
-  flash('Show was successfully listed!')
+ # flash('Show was successfully listed!')
   # TODO: on unsuccessful db insert, flash an error instead.
   # e.g., flash('An error occurred. Show could not be listed.')
   # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
-  return render_template('pages/home.html')
+ # return render_template('pages/home.html')
 
 @app.errorhandler(404)
 def not_found_error(error):
