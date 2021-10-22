@@ -10,12 +10,11 @@ class ShowForm(Form):
     venue_id = StringField(
         'venue_id'
     )
-    #date = DateTimeField(
-    #    'datetime',
-    #    validators=[DataRequired()],
-    #    default= datetime.today(),
-    #    format='%Y-%m-%d %H:%M:%S'
-    #)
+    start_time = DateTimeField(
+        'start_time',
+        validators=[DataRequired()],
+        default= datetime.today()
+    )
 
 class VenueForm(Form):
     name = StringField(

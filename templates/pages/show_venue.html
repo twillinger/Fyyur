@@ -9,11 +9,7 @@
 		<p class="subtitle">
 			ID: {{ venue.id }}
 		</p>
-		<div class="genres">
-			{% for genre in venue.genres %}
-			<span class="genre">{{ genre }}</span>
-			{% endfor %}
-		</div>
+		<!-- Genre not working -->
 		<p>
 			<i class="fas fa-globe-americas"></i> {{ venue.city }}, {{ venue.state }}
 		</p>
@@ -54,7 +50,7 @@
 			<div class="tile tile-show">
 				<img src="{{ show.artist_image_link }}" alt="Show Artist Image" />
 				<h5><a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a></h5>
-				<h6>{{ show.start_time|datetime('full') }}</h6>
+				<h6>{{ show.start_time }}</h6>
 			</div>
 		</div>
 		{% endfor %}
@@ -68,7 +64,7 @@
 			<div class="tile tile-show">
 				<img src="{{ show.artist_image_link }}" alt="Show Artist Image" />
 				<h5><a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a></h5>
-				<h6>{{ show.start_time|datetime('full') }}</h6>
+				<h6>{{ show.start_time }}</h6>
 			</div>
 		</div>
 		{% endfor %}

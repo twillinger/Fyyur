@@ -8,7 +8,7 @@
         <div class="tile tile-show"> 
             <h4><a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a></h4>       
             <img src="{{ show.image_link }}" alt="Artist Image" />
-            <h4>{{ show.datetime }}</h4>
+            <h4>{{ show.start_time }}</h4>
             <p>playing at</p>
             <h5><a href="/venues/{{ show.venue_id }}">{{ show.venue_name }}</a></h5>
         </div>
@@ -22,7 +22,7 @@
         <div class="tile tile-show">   
             <h4><a href="/artists/{{ pastt.artist_id }}">{{ pastt.artist_name }}</a></h4>       
             <img src="{{ pastt.image_link }}" alt="Artist Image" />
-            <h4>{{ pastt.datetime }}</h4>
+            <h4>{{ pastt.start_time }}</h4>
             <p>playing at</p>
             <h5><a href="/venues/{{ pastt.venue_id }}">{{ pastt.venue_name }}</a></h5>
         </div>
