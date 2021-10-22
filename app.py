@@ -14,6 +14,7 @@ from flask_wtf import Form
 from forms import *
 from flask_migrate import Migrate
 from datetime import date
+from sqlalchemy.exc import SQLAlchemyError
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -43,8 +44,10 @@ class Venue(db.Model):
     state = db.Column(db.String(120))
     address = db.Column(db.String(120))
     phone = db.Column(db.String(120))
+    genre = db.Column(db.String(500))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
+    website_link = db.Column(db.String(120))
     seeking_talent = db.Column(db.Boolean, nullable=False, default=False)
     seeking_description = db.Column(db.String(1000))
     shows = db.relationship('Show', backref='venue', lazy=True)
@@ -57,10 +60,12 @@ class Artist(db.Model):
     name = db.Column(db.String)
     city = db.Column(db.String(120))
     state = db.Column(db.String(120))
+    address = db.Column(db.String(120))
     phone = db.Column(db.String(120))
     genres = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
+    website = db.Column(db.String(120))
     seeking_venue = db.Column(db.Boolean, nullable=True, default=False)
     seeking_description = db.Column(db.String(1000))
     shows = db.relationship('Show', backref='artist', lazy=True)
@@ -155,12 +160,12 @@ def create_venue_submission():
                 name=form.name.data,
                 city=form.city.data,
                 state=form.state.data,
-                adress=form.adress.data,
+                address=form.address.data,
                 phone=form.phone.data,
-                genres=form.genres.data,
-                facebook_link=form.genres.data,
-                image_link=form.genres.data,
-                website=form.genres.data,
+                genre=form.genres.data,
+                facebook_link=form.facebook_link.data,
+                image_link=form.image_link.data,
+                website_link=form.website_link.data,
                 seeking_talent=form.seeking_talent.data,
                 seeking_description=form.seeking_description.data
             )
@@ -302,12 +307,12 @@ def create_artist_submission():
                 name=form.name.data,
                 city=form.city.data,
                 state=form.state.data,
-                adress=form.adress.data,
+                #address=form.address.data,
                 phone=form.phone.data,
                 genres=form.genres.data,
-                facebook_link=form.genres.data,
-                image_link=form.genres.data,
-                website=form.genres.data,
+                facebook_link=form.facebook_link.data,
+                image_link=form.image_link.data,
+                website=form.website_link.data,
                 seeking_venue=form.seeking_venue.data,
                 seeking_description=form.seeking_description.data
             )
